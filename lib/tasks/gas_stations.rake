@@ -83,9 +83,9 @@ namespace :gas_stations do
         results = JSON.parse(response.to_str)
 
         list_gas_stations = results['ListaEESSPrecio']
-
-        puts results['Nota']
-        puts results['ResultadoConsulta']
+        #puts list_gas_stations.count
+        #puts results['Nota']
+        #puts results['ResultadoConsulta']
 
 
         new_list = list_gas_stations.map {|gas_station| gas_station.transform_keys(&mappings.method(:[])).merge!(updated_at: results['Fecha'])}
