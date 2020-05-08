@@ -34,7 +34,7 @@ RSpec.describe GasStation, type: :model do
       FactoryBot.create :gasstation_lugo
     end
 
-    context "when the coordinates of our position are 40.416729, -3.703339" do
+    context "when the coordinates of our position are 40.416729, -3.703339 (Madrid - Sol)" do
       subject(:gas_stations) {GasStation.near_by_coordinates(latitude: 40.416729, longitude: -3.703339, page: 1) }
       it { expect(gas_stations.size).to be 2 }
       it { expect(gas_stations).to include FactoryBot.build(:gasstation_embajadores)}
