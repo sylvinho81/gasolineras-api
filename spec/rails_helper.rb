@@ -63,6 +63,10 @@ RSpec.configure do |config|
   #
   config.include FactoryBot::Syntax::Methods
 
+  # Include our new json helper in all of our controller specs
+  config.include Helpers::JsonHelpers, type: :controller
+
+
   Shoulda::Matchers.configure do |config|
     config.integrate do |with|
       with.test_framework :rspec

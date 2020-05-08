@@ -17,13 +17,19 @@ RSpec.describe GasStationsController, type: :controller do
 
     context "the geolocation is not activated and we don't receive lat and long" do
       it "JSON body response contains gas stations near to Puerta del Sol" do
-        json_response = JSON.parse(response.body)
-        expect(json_response["gas_stations"].size).to be 2
+        expect(json["gas_stations"].size).to be 2
       end
 
       it "JSON body response contains the attribute type_search 'coordinates'" do
-        json_response = JSON.parse(response.body)
-        expect(json_response["type_search"]).to eq "coordinates"
+        expect(json["type_search"]).to eq "coordinates"
+      end
+
+      it "JSON body response contains specific keys" do
+        expect(json.keys).to eq ["gas_stations", "page", "pages", "latitude", "longitude", "type_search"]
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(:success)
       end
     end
 
