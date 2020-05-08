@@ -25,31 +25,31 @@ class GasStationsController < ApplicationController
 
   def search
     q = params[:q]
+    Rails.logger.info "Input search #{q}"
     lat = params[:lat].try(:to_f)
     lon = params[:lon].try(:to_f)
-    response = {  gas_stations: [],
-                  page: 0,
-                  pages: 0,
-                  input_search: q,
-                  latitude: 0,
-                  longitude: 0,
-                  type_search: lat.present? && lon.present? ? 'coordinates' : 'normal' }
+    type_search = lat.present? && lon.present? ? 'coordinates' : 'normal'
+
+    response = build_response(input_search: q, type_search: type_search)
+
     first_suggestion = if lat.present? && lon.present?
                          Geocoder.search([lat, lon], params: {countrycodes: "es"}).first
                        else
                          Geocoder.search(q, params: {countrycodes: "es"}).first
                        end
+
     if first_suggestion.present?
       latitude =  first_suggestion.coordinates.first
       longitude = first_suggestion.coordinates.second
       @gas_stations = GasStation.near_by_coordinates(latitude: latitude,longitude: longitude, page: @page)
-      response = {  gas_stations: @gas_stations,
-                    page: @gas_stations.current_page - 1,
-                    pages:  @gas_stations.total_pages,
-                    input_search: q,
-                    latitude: lat || 0,
-                    longitude: lon || 0,
-                    type_search: lat.present? && lon.present? ? 'coordinates' : 'normal' }
+      response = build_response(gas_stations: @gas_stations,
+                                page: @gas_stations.current_page - 1,
+                                pages:  @gas_stations.total_pages,
+                                input_search: q,
+                                latitude: lat,
+                                longitude: lon,
+                                type_search: type_search)
+
     end
 
     render json: response
@@ -76,5 +76,14 @@ class GasStationsController < ApplicationController
       @page = params[:page].present? ? params[:page].to_i + 1 : 1
     end
 
+    def build_response(gas_stations: [], page: 0, pages: 0, input_search: '', latitude: -1, longitude: -1, type_search: 'coordinates')
+      {  gas_stations: gas_stations,
+         page: page,
+         pages:  pages,
+         input_search: input_search,
+         latitude: latitude,
+         longitude: longitude,
+         type_search: type_search}
 
+    end
 end
