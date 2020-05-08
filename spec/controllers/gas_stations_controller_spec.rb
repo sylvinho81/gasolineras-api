@@ -13,6 +13,8 @@ RSpec.describe GasStationsController, type: :controller do
       FactoryBot.create :gasstation_lugo
     end
 
+    keys_response_index = ["gas_stations", "page", "pages", "latitude", "longitude", "type_search"]
+
     context "the geolocation is not activated and we don't receive lat and long" do
       before do
         get :index
@@ -26,8 +28,8 @@ RSpec.describe GasStationsController, type: :controller do
         expect(json["type_search"]).to eq "coordinates"
       end
 
-      it "JSON body response contains specific keys" do
-        expect(json.keys).to eq ["gas_stations", "page", "pages", "latitude", "longitude", "type_search"]
+      it "JSON body response contains specific keys: #{keys_response_index.join(',')}" do
+        expect(json.keys).to eq keys_response_index
       end
 
       it 'returns status code 200' do
@@ -68,15 +70,34 @@ RSpec.describe GasStationsController, type: :controller do
         expect(json["gas_stations"].size).to eq(1)
       end
 
-      it "JSON body response coordinates should match with the coordinates of the first place returned by Geocoder plugin" do
+      it "JSON body response coordinates should match with the coordinates([43.0462247,-7.4739921]) of the first place returned by Geocoder plugin" do
         expect(json["latitude"]).to eq 43.0462247
         expect(json["longitude"]).to eq -7.4739921
       end
     end
+  end
 
 
 
+  describe "GET#autocomplete" do
+    context "the user types 'madrid' in the search input file" do
+      before do
+        params = {:q => "madrid", format: :json}
+        get :autocomplete, params: params
+      end
 
+      it "JSON body response contains specific keys" do
+        expect(json.keys).to eq ["suggestions", "coordinates"]
+      end
+
+      it "JSON body response suggestions is an array with the suggested gas stations" do
+        expect(json["suggestions"]).to be_a_kind_of(Array)
+      end
+
+      it "JSON body response coordinates is an array with the coordinates of the suggested gas stations" do
+        expect(json["coordinates"]).to be_a_kind_of(Array)
+      end
+    end
   end
 
 
