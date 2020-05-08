@@ -39,11 +39,10 @@ class GasStationsController < ApplicationController
                        end
 
     if first_suggestion.present?
-      Rails.logger.info "first suggestion #{first_suggestion.inspect}"
       latitude =  first_suggestion.coordinates.first
       longitude = first_suggestion.coordinates.second
       @gas_stations = GasStation.near_by_coordinates(latitude: latitude,longitude: longitude, page: @page)
-      Rails.logger.info "first suggestion #{@gas_stations.count}"
+
       response = build_response(gas_stations: @gas_stations,
                                 page: @gas_stations.current_page - 1,
                                 pages:  @gas_stations.total_pages,

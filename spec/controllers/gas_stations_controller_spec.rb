@@ -45,7 +45,7 @@ RSpec.describe GasStationsController, type: :controller do
       end
 
       it "JSON body response contains gas stations near to that location" do
-        expect(json["gas_stations"].size) == 1
+        expect(json["gas_stations"].size).to eq 1
       end
     end
   end
@@ -61,13 +61,20 @@ RSpec.describe GasStationsController, type: :controller do
     context "the user uses the search field and enter Lugo and click on button 'Buscar'" do
       before do
         params = {:q => "Lugo", format: :json}
-        get :index, params: params
+        get :search, params: params
       end
 
       it "JSON body response contains gas stations near to Lugo" do
-        expect(json["gas_stations"].size) == 1
+        expect(json["gas_stations"].size).to eq(1)
+      end
+
+      it "JSON body response coordinates should match with the coordinates of the first place returned by Geocoder plugin" do
+        expect(json["latitude"]).to eq 43.0462247
+        expect(json["longitude"]).to eq -7.4739921
       end
     end
+
+
 
 
   end
