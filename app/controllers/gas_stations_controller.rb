@@ -27,10 +27,6 @@ class GasStationsController < ApplicationController
     q = params[:q]
     lat = params[:lat].try(:to_f)
     lon = params[:lon].try(:to_f)
-
-    first_suggestion = lat.present? && lon.present? ?
-                           Geocoder.search([lat, lon], params: {countrycodes: "es"}).first :
-                           Geocoder.search(q, params: {countrycodes: "es"}).first
     response = {  gas_stations: [],
                   page: 0,
                   pages: 0,
@@ -38,11 +34,22 @@ class GasStationsController < ApplicationController
                   latitude: 0,
                   longitude: 0,
                   type_search: lat.present? && lon.present? ? 'coordinates' : 'normal' }
+    first_suggestion = if lat.present? && lon.present?
+                         Geocoder.search([lat, lon], params: {countrycodes: "es"}).first
+                       else
+                         Geocoder.search(q, params: {countrycodes: "es"}).first
+                       end
     if first_suggestion.present?
       latitude =  first_suggestion.coordinates.first
       longitude = first_suggestion.coordinates.second
       @gas_stations = GasStation.near_by_coordinates(latitude: latitude,longitude: longitude, page: @page)
-      response.merge!(gas_stations: @gas_stations, page: @gas_stations.current_page - 1, pages: @gas_stations.total_pages, latitude: lat || 0, longitude: lon || 0)
+      response = {  gas_stations: @gas_stations,
+                    page: @gas_stations.current_page - 1,
+                    pages:  @gas_stations.total_pages,
+                    input_search: q,
+                    latitude: lat || 0,
+                    longitude: lon || 0,
+                    type_search: lat.present? && lon.present? ? 'coordinates' : 'normal' }
     end
 
     render json: response
