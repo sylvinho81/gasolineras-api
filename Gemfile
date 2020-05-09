@@ -48,9 +48,14 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
+# Simple HTTP and REST client for Ruby
 gem 'rest-client'
 
+# Geocoding: Look up street addresses, IP addresses, and geographic coordinates
 gem 'geocoder'
 
+# Support for Cross-Origin Resource Sharing (CORS)
 gem 'rack-cors', :require => 'rack/cors'
+
+# Pagination library
 gem 'will_paginate'
