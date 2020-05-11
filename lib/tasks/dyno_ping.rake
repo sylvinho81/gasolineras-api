@@ -8,8 +8,14 @@ desc "Pings PING_URL to keep a dyno alive"
      end
 
      if ENV["PING_URL_REST_API"]
-          uri = URI(ENV["PING_URL_REST_API"])
-          response = Net::HTTP.get_response(uri)
-          puts response.inspect
+        uri = URI(ENV["PING_URL_REST_API"])
+        response = Net::HTTP.get_response(uri)
+        puts response.inspect
+     end
+
+     if ENV["OTHER_URL"]
+        uri = URI(ENV["OTHER_URL"])
+        response = Net::HTTP.get_response(uri)
+        puts response.inspect
      end
 end
