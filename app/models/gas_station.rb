@@ -6,7 +6,6 @@ class GasStation < ApplicationRecord
   self.primary_key = :ideess
   self.per_page = 16
 
-  URL_GOB = 'https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/'
   PROXIMITY_RADIUS_KM = 20
 
   MAPPINGS_GOB_API = { 'C.P.' => 'cp',
@@ -57,8 +56,8 @@ class GasStation < ApplicationRecord
 
 
 
-  def self.import_gas_stations
-    RestClient.get(URL_GOB, {accept: :json}) { |response, request, result|
+  def self.import_gas_stations(url_api)
+    RestClient.get(url_api, {accept: :json}) { |response, request, result|
       if response.code ==  200
         results = JSON.parse(response.to_str)
 
@@ -79,7 +78,6 @@ end
 
 
 # Example json response
-# https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/
 =begin
             {
               "Fecha":"Contenido de la cadena",
