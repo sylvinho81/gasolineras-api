@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_27_111601) do
+ActiveRecord::Schema.define(version: 2020_05_13_102404) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,11 +45,8 @@ ActiveRecord::Schema.define(version: 2020_04_27_111601) do
     t.string "id_province"
     t.string "idccaa"
     t.datetime "updated_at"
-    t.index ["address"], name: "index_gas_stations_on_address"
     t.index ["ideess"], name: "index_gas_stations_on_ideess", unique: true
-    t.index ["location"], name: "index_gas_stations_on_location"
-    t.index ["municipality"], name: "index_gas_stations_on_municipality"
-    t.index ["province"], name: "index_gas_stations_on_province"
+    t.index ["latitude", "longitude"], name: "index_gas_stations_on_latitude_and_longitude"
   end
 
 end
