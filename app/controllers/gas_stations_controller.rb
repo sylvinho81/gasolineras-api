@@ -1,6 +1,6 @@
 class GasStationsController < ApplicationController
   before_action :set_gas_station, only: [:show]
-  before_action :set_page, only: [:index, :search]
+  before_action :set_page, only: [:index, :search, :by_province]
 
   # GET /gas_stations
   def index
@@ -64,6 +64,16 @@ class GasStationsController < ApplicationController
     render json: { suggestions: @suggestions,
                    coordinates: @coordinates
                  }
+  end
+
+
+  def by_province
+    province = params[:province]
+    @gas_stations = GasStation.where("LOWER(province) = ?", province.downcase).paginate(page: @page)
+    render json: { gas_stations: @gas_stations,
+                   page: @gas_stations.current_page - 1,
+                   pages:  @gas_stations.total_pages,
+                  }
   end
 
 
