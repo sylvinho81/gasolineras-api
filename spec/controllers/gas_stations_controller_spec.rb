@@ -102,4 +102,36 @@ RSpec.describe GasStationsController, type: :controller do
 
 
 
+  describe "GET#by_province" do
+    setup do
+      FactoryBot.create :gasstation_embajadores
+      FactoryBot.create :gasstation_acacias
+      FactoryBot.create :gasstation_lugo
+    end
+
+    context "the user types '/gasolineras-en-lugo' in the browser" do
+      before do
+        params = {:province => "lugo", format: :json}
+        get :by_province, params: params
+      end
+
+      it "JSON body response contains gas stations near to Lugo" do
+        expect(json["gas_stations"].size).to eq(1)
+      end
+    end
+
+
+    context "the user types '/gasolineras-en-granada' in the browser" do
+      before do
+        params = {:province => "granada", format: :json}
+        get :by_province, params: params
+      end
+
+      it "JSON body response doesn't contain gas stations near to Granada" do
+        expect(json["gas_stations"].size).to eq(0)
+      end
+    end
+  end
+
+
 end

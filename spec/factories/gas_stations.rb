@@ -5,6 +5,7 @@ FactoryBot.define do
     longitude {-3.703139}
     address {"GLORIETA EMBAJADORES, 0"}
     label {"CEPSA"}
+    province {"MADRID"}
   end
 
   factory :gasstation_acacias, class: GasStation do
@@ -13,6 +14,7 @@ FactoryBot.define do
     longitude {-3.705389}
     address  {"CL PASEO ACACIAS, 8"}
     label {"REPSOL"}
+    province {"MADRID"}
   end
 
 
@@ -22,5 +24,6 @@ FactoryBot.define do
     longitude {-7.560694}
     address { "POLIGONO RUA MERCADURIAS, 218 PG. CEAO, 218"}
     label {"CONFORT AUTO"}
+    province {"LUGO"}
   end
 end
