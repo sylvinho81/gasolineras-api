@@ -6,13 +6,16 @@ class GasStationsController < ApplicationController
   def index
     latitude =  params[:lat].present? ?  params[:lat] : 40.416729
     longitude = params[:long].present? ?  params[:long] : -3.703339
-    @gas_stations = GasStation.near_by_coordinates(latitude: latitude.to_f, longitude: longitude.to_f, page: @page)
+    type_fuel = params[:radio] || 'all'
+    @gas_stations = GasStation.near_by_coordinates(latitude: latitude.to_f, longitude: longitude.to_f, page: @page, type_fuel: type_fuel)
     render json: { gas_stations: @gas_stations,
                    page: @gas_stations.current_page - 1,
                    pages: @gas_stations.total_pages,
                    latitude: latitude,
                    longitude: longitude,
-                   type_search: 'coordinates'
+                   type_search: 'coordinates',
+                   type_fuel: type_fuel
+
 
     }
   end
@@ -28,20 +31,20 @@ class GasStationsController < ApplicationController
     Rails.logger.info "Input search #{q}"
     lat = params[:lat].try(:to_f)
     lon = params[:lon].try(:to_f)
+    type_fuel = params[:radio] || 'all'
     type_search = lat.present? && lon.present? ? 'coordinates' : 'normal'
 
-    response = build_response(input_search: q, type_search: type_search)
+    response = build_response(input_search: q, type_search: type_search, type_fuel: type_fuel)
 
     first_suggestion = if lat.present? && lon.present?
                          Geocoder.search([lat, lon], params: {countrycodes: "es"}).first
                        else
                          Geocoder.search(q, params: {countrycodes: "es"}).first
                        end
-
     if first_suggestion.present?
       latitude =  first_suggestion.coordinates.first
       longitude = first_suggestion.coordinates.second
-      @gas_stations = GasStation.near_by_coordinates(latitude: latitude,longitude: longitude, page: @page)
+      @gas_stations = GasStation.near_by_coordinates(latitude: latitude,longitude: longitude, page: @page, type_fuel: type_fuel)
 
       response = build_response(gas_stations: @gas_stations,
                                 page: @gas_stations.current_page - 1,
@@ -49,7 +52,8 @@ class GasStationsController < ApplicationController
                                 input_search: q,
                                 latitude: lat || latitude,
                                 longitude: lon || longitude,
-                                type_search: type_search)
+                                type_search: type_search,
+                                type_fuel: type_fuel)
 
     end
 
@@ -87,14 +91,15 @@ class GasStationsController < ApplicationController
       @page = params[:page].present? ? params[:page].to_i + 1 : 1
     end
 
-    def build_response(gas_stations: [], page: 0, pages: 0, input_search: '', latitude: 0, longitude: 0, type_search: 'coordinates')
+    def build_response(gas_stations: [], page: 0, pages: 0, input_search: '', latitude: 0, longitude: 0, type_search: 'coordinates', type_fuel: 'all')
       {  gas_stations: gas_stations,
          page: page,
          pages:  pages,
          input_search: input_search,
          latitude: latitude,
          longitude: longitude,
-         type_search: type_search}
+         type_search: type_search,
+         type_fuel: type_fuel}
 
     end
 end

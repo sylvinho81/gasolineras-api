@@ -50,9 +50,15 @@ class GasStation < ApplicationRecord
 
 
 
-  def self.near_by_coordinates(latitude:, longitude:, page:)
-    GasStation.near([latitude,longitude], PROXIMITY_RADIUS_KM, units: :km).paginate(page: page)
+  def self.near_by_coordinates(latitude:, longitude:, page:, type_fuel: 'all')
+    if type_fuel == 'all'
+      GasStation.near([latitude,longitude], PROXIMITY_RADIUS_KM, units: :km).paginate(page: page)
+    else
+      GasStation.where("#{type_fuel} is NOT NULL").order("#{type_fuel} asc").near([latitude,longitude], PROXIMITY_RADIUS_KM, units: :km).paginate(page: page)
+    end
   end
+
+
 
 
 

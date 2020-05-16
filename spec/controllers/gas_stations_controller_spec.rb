@@ -13,7 +13,7 @@ RSpec.describe GasStationsController, type: :controller do
       FactoryBot.create :gasstation_lugo
     end
 
-    keys_response_index = ["gas_stations", "page", "pages", "latitude", "longitude", "type_search"]
+    keys_response_index = ["gas_stations", "page", "pages", "latitude", "longitude", "type_search", "type_fuel"]
 
     context "the geolocation is not activated and we don't receive lat and long" do
       before do
