@@ -7,6 +7,7 @@ class GasStation < ApplicationRecord
   self.per_page = 16
 
   PROXIMITY_RADIUS_KM = 20
+  PROXIMITY_RADIUS_KM_FILTER_BY_FUEL = 10
 
   MAPPINGS_GOB_API = { 'C.P.' => 'cp',
                        'Dirección' => 'address',
@@ -54,7 +55,7 @@ class GasStation < ApplicationRecord
     if type_fuel == 'all'
       GasStation.near([latitude,longitude], PROXIMITY_RADIUS_KM, units: :km).paginate(page: page)
     else
-      GasStation.where("#{type_fuel} is NOT NULL").order("#{type_fuel} asc").near([latitude,longitude], PROXIMITY_RADIUS_KM, units: :km).paginate(page: page)
+      GasStation.where("#{type_fuel} is NOT NULL").order("#{type_fuel} asc").near([latitude,longitude], PROXIMITY_RADIUS_KM_FILTER_BY_FUEL, units: :km).paginate(page: page)
     end
   end
 
