@@ -70,8 +70,12 @@ class GasStation < ApplicationRecord
 
         list_gas_stations = results['ListaEESSPrecio']
 
-        new_list = list_gas_stations.map {|gas_station| gas_station.transform_keys(&MAPPINGS_GOB_API.method(:[])).merge!(updated_at: results['Fecha'])}
-        new_list_formatted = new_list.map {|gas_station| gas_station.merge!(latitude: gas_station["latitude"].gsub(",", "."), longitude: gas_station["longitude"].gsub(",", "."))}
+        new_list = list_gas_stations.map {|gas_station|
+          gas_station.transform_keys(&MAPPINGS_GOB_API.method(:[])).merge!(updated_at: results['Fecha'])
+        }
+        new_list_formatted = new_list.map {|gas_station|
+          gas_station.merge!(latitude: gas_station["latitude"].gsub(",", "."), longitude: gas_station["longitude"].gsub(",", "."))
+        }
 
         GasStation.upsert_all(new_list_formatted, unique_by: :ideess)
 
