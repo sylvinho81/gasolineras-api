@@ -83,9 +83,9 @@ class GasStation < ApplicationRecord
         new_list_formatted = new_list.map {|gas_station|
           gas_station.merge!(latitude: gas_station["latitude"].gsub(",", "."), longitude: gas_station["longitude"].gsub(",", "."))
         }
-        new_list_formatted.except!(nil)
-        puts(new_list_formatted)
-        GasStation.upsert_all(new_list_formatted.select {|k, v| !k.nil? && k != ''}, unique_by: :ideess)
+        a = new_list_formatted.map {|el| el.except!(nil)}
+        puts(a)
+        GasStation.upsert_all(a, unique_by: :ideess)
 
       else
         Rails.logger.info("Error calling sedeaplicaciones.minetur.gob.es")
