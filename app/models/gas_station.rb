@@ -84,7 +84,7 @@ class GasStation < ApplicationRecord
           gas_station.merge!(latitude: gas_station["latitude"].gsub(",", "."), longitude: gas_station["longitude"].gsub(",", "."))
         }
 
-        puts(new_list_formatted)
+        puts(new_list_formatted.select {|k, v| !k.nil? && k != ''})
         GasStation.upsert_all(new_list_formatted.select {|k, v| !k.nil? && k != ''}, unique_by: :ideess)
 
       else
