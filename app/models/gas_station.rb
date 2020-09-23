@@ -9,6 +9,7 @@ class GasStation < ApplicationRecord
   PROXIMITY_RADIUS_KM = 20
   PROXIMITY_RADIUS_KM_FILTER_BY_FUEL = 10
 
+
   MAPPINGS_GOB_API = { 'C.P.' => 'cp',
                        'Dirección' => 'address',
                        'Horario' =>  'schedule',
@@ -24,9 +25,12 @@ class GasStation < ApplicationRecord
                        'Precio Gases licuados del petróleo' => 'price_liquefied_petroleum_gases',
                        'Precio Gasoleo A' => 'price_diesel_a',
                        'Precio Gasoleo B' => 'price_diesel_b',
-                       'Precio Gasolina 95 Protección' => 'price_gasoline_95_protection',
-                       'Precio Gasolina  98' => 'price_gasoline_98',
-                       'Precio Nuevo Gasoleo A' => 'price_new_diesel_a',
+                       'Precio Gasolina 95 E10' => 'price_gasoline_95_e10',
+                       'Precio Gasolina 95 E5' => 'price_gasoline_95_e5',
+                       'Precio Gasolina 95 E5 Premium' => 'price_gasoline_95_e5_premium',
+                       'Precio Gasolina  98 E10' => 'price_gasoline_98_e10',
+                       'Precio Gasolina  98 E5' => 'price_gasoline_98_e5',
+                       'Precio Gasoleo Premium' => 'price_diesel_premium',
                        'Provincia' => 'province',
                        'Remisión' => 'remission',
                        'Rótulo' => 'label',
@@ -70,9 +74,12 @@ class GasStation < ApplicationRecord
 
         list_gas_stations = results['ListaEESSPrecio']
 
+
+        puts(list_gas_stations)
         new_list = list_gas_stations.map {|gas_station|
           gas_station.transform_keys(&MAPPINGS_GOB_API.method(:[])).merge!(updated_at: results['Fecha'])
         }
+
         new_list_formatted = new_list.map {|gas_station|
           gas_station.merge!(latitude: gas_station["latitude"].gsub(",", "."), longitude: gas_station["longitude"].gsub(",", "."))
         }
