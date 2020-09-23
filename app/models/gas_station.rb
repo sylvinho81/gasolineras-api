@@ -9,6 +9,7 @@ class GasStation < ApplicationRecord
   PROXIMITY_RADIUS_KM = 20
   PROXIMITY_RADIUS_KM_FILTER_BY_FUEL = 10
 
+
   MAPPINGS_GOB_API = { 'C.P.' => 'cp',
                        'Dirección' => 'address',
                        'Horario' =>  'schedule',
@@ -74,7 +75,7 @@ class GasStation < ApplicationRecord
         list_gas_stations = results['ListaEESSPrecio']
 
 
-        puts(list_gas_stations)
+        #puts(list_gas_stations)
         new_list = list_gas_stations.map {|gas_station|
           gas_station.transform_keys(&MAPPINGS_GOB_API.method(:[])).merge!(updated_at: results['Fecha'])
         }
@@ -83,8 +84,8 @@ class GasStation < ApplicationRecord
           gas_station.merge!(latitude: gas_station["latitude"].gsub(",", "."), longitude: gas_station["longitude"].gsub(",", "."))
         }
 
-
-        GasStation.upsert_all(new_list_formatted, unique_by: :ideess)
+        puts(new_list_formatted)
+        GasStation.upsert_all(new_list_formatted.map{|col| col != nil}, unique_by: :ideess)
 
       else
         Rails.logger.info("Error calling sedeaplicaciones.minetur.gob.es")
