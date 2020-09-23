@@ -85,7 +85,7 @@ class GasStation < ApplicationRecord
         }
 
         puts(new_list_formatted)
-        GasStation.upsert_all(new_list_formatted.select {|k, v| !k.nil? }, unique_by: :ideess)
+        GasStation.upsert_all(new_list_formatted.select {|k, v| !k.nil? && k != ''}, unique_by: :ideess)
 
       else
         Rails.logger.info("Error calling sedeaplicaciones.minetur.gob.es")
