@@ -9,7 +9,6 @@ class GasStation < ApplicationRecord
   PROXIMITY_RADIUS_KM = 20
   PROXIMITY_RADIUS_KM_FILTER_BY_FUEL = 10
 
-
   MAPPINGS_GOB_API = { 'C.P.' => 'cp',
                        'Dirección' => 'address',
                        'Horario' =>  'schedule',
@@ -25,12 +24,12 @@ class GasStation < ApplicationRecord
                        'Precio Gases licuados del petróleo' => 'price_liquefied_petroleum_gases',
                        'Precio Gasoleo A' => 'price_diesel_a',
                        'Precio Gasoleo B' => 'price_diesel_b',
+                       'Precio Gasoleo Premium' => 'price_diesel_premium',
                        'Precio Gasolina 95 E10' => 'price_gasoline_95_e10',
                        'Precio Gasolina 95 E5' => 'price_gasoline_95_e5',
                        'Precio Gasolina 95 E5 Premium' => 'price_gasoline_95_e5_premium',
                        'Precio Gasolina 98 E10' => 'price_gasoline_98_e10',
                        'Precio Gasolina 98 E5' => 'price_gasoline_98_e5',
-                       'Precio Gasoleo Premium' => 'price_diesel_premium',
                        'Provincia' => 'province',
                        'Remisión' => 'remission',
                        'Rótulo' => 'label',
@@ -83,6 +82,7 @@ class GasStation < ApplicationRecord
         new_list_formatted = new_list.map {|gas_station|
           gas_station.merge!(latitude: gas_station["latitude"].gsub(",", "."), longitude: gas_station["longitude"].gsub(",", "."))
         }
+
 
         GasStation.upsert_all(new_list_formatted, unique_by: :ideess)
 
