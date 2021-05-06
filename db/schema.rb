@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_13_102404) do
+ActiveRecord::Schema.define(version: 2020_09_23_193022) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,9 +31,6 @@ ActiveRecord::Schema.define(version: 2020_05_13_102404) do
     t.string "price_liquefied_petroleum_gases"
     t.string "price_diesel_a"
     t.string "price_diesel_b"
-    t.string "price_gasoline_95_protection"
-    t.string "price_gasoline_98"
-    t.string "price_new_diesel_a"
     t.string "province"
     t.string "remission"
     t.string "label"
@@ -45,6 +42,12 @@ ActiveRecord::Schema.define(version: 2020_05_13_102404) do
     t.string "id_province"
     t.string "idccaa"
     t.datetime "updated_at"
+    t.string "price_gasoline_95_e10"
+    t.string "price_gasoline_95_e5"
+    t.string "price_gasoline_95_e5_premium"
+    t.string "price_gasoline_98_e10"
+    t.string "price_gasoline_98_e5"
+    t.string "price_diesel_premium"
     t.index ["ideess"], name: "index_gas_stations_on_ideess", unique: true
     t.index ["latitude", "longitude"], name: "index_gas_stations_on_latitude_and_longitude"
   end
