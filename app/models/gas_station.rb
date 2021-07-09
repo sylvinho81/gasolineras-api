@@ -85,6 +85,7 @@ class GasStation < ApplicationRecord
         }
         a = new_list_formatted.map {|el| el.except!(nil)}
         puts(a)
+        Rails.logger.info("Number of stations #{a.count}")
         GasStation.upsert_all(a, unique_by: :ideess)
 
       else
